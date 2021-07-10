@@ -22,23 +22,26 @@ class CovidService
         $results = $this->restService->getResults();
         foreach ($results as $report) {
             $month = self::getMonth($report['Date']);
-            if (!isset($return[$month])) {
-                $return[$month] = [
-                    'mes' => $month,
+            if (!isset($return[$month['number']])) {
+                $return[$month['number']] = [
+                    'mes' => $month['name'],
                     'total' => $report['Cases'],
                 ];
                 continue;
             }
 
-            $return[$month]['total'] += $report['Cases'];
+            $return[$month['number']]['total'] += $report['Cases'];
         }
         return $return;
     }
 
-    private function getMonth($date): string
+    private function getMonth($date): array
     {
+        date_default_timezone_set('America/Sao_Paulo');
+        setlocale(LC_TIME, 'pt_BR.utf-8', 'ptb', 'pt_BR', 'portuguese-brazil', 'portuguese-brazilian', 'bra', 'brazil', 'br');
+
         $date = Carbon::create($date);
-        return $date->format('m');
+        return [ 'number' => $date->format('m'), 'name' => $date->formatLocalized('%B') ];
     }
 
     public function getConfirmedCases(): array

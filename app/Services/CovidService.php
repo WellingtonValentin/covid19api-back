@@ -41,7 +41,7 @@ class CovidService
         setlocale(LC_TIME, 'pt_BR.utf-8', 'ptb', 'pt_BR', 'portuguese-brazil', 'portuguese-brazilian', 'bra', 'brazil', 'br');
 
         $date = Carbon::create($date);
-        return [ 'number' => $date->format('m'), 'name' => $date->formatLocalized('%B') ];
+        return [ 'number' => intval($date->format('m')), 'name' => $date->formatLocalized('%B') ];
     }
 
     public function getConfirmedCases(): array

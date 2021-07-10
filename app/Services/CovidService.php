@@ -32,7 +32,8 @@ class CovidService
 
             $return[$month['number']]['total'] += $report['Cases'];
         }
-        return $return;
+
+        return $this->formatTotal($return);
     }
 
     private function getMonth($date): array
@@ -47,5 +48,20 @@ class CovidService
     public function getConfirmedCases(): array
     {
         return self::treatResults();
+    }
+
+    /**
+     * @param array $return
+     * @return array|array[]
+     */
+    private function formatTotal(array $return): array
+    {
+        $return = array_map(function ($month) {
+            return [
+                'mes' => $month['mes'],
+                'total' => number_format($month['total'], 0, '', '.')
+            ];
+        }, $return);
+        return $return;
     }
 }
